@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Method notes</title>
+<meta name="description" content="The reconstruction, the two things that had to be added before the ratings made sense, and what the team-versus-player bracket does and does not establish.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+:root{
+  --surface:#fcfcfb; --raised:#f4f3ef; --ink:#0b0b0b; --ink-2:#43423f; --ink-3:#7d7b74;
+  --rule:#e3e2dc; --accent:#1c5cab; --mark:#eb6834;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --surface:#14140f; --raised:#1e1e18; --ink:#f2f1ec; --ink-2:#c9c7bf; --ink-3:#8d8b83;
+    --rule:#2e2e27; --accent:#7fb0f0; --mark:#f2895a;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--surface); color:var(--ink);
+  font:400 17px/1.62 "Source Sans 3","Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-feature-settings:"kern" 1;
+}
+.wrap{max-width:1020px;margin:0 auto;padding:0 22px}
+.bar{border-bottom:1px solid var(--rule);background:var(--surface)}
+.bar .wrap{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:baseline;padding-top:16px;padding-bottom:15px}
+.bar .slug{
+  font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12.5px;letter-spacing:.02em;color:var(--ink-2)
+}
+.bar nav{margin-left:auto;display:flex;gap:18px}
+.bar a{
+  font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12.5px;color:var(--ink-3);text-decoration:none;border-bottom:1px solid transparent
+}
+.bar a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+main{padding:0 0 96px}
+.col{max-width:700px}
+h1{
+  font-family:Archivo,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight:700;font-size:clamp(30px,5.4vw,46px);line-height:1.08;
+  letter-spacing:-.022em;margin:54px 0 20px;max-width:640px
+}
+h2{
+  font-family:Archivo,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight:600;font-size:22px;line-height:1.24;letter-spacing:-.012em;
+  margin:52px 0 14px;max-width:700px
+}
+h3{font-family:Archivo,"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:600;
+  font-size:18.5px;letter-spacing:-.008em;margin:40px 0 8px}
+p.meta{font-size:14.5px;color:var(--ink-3);margin:-2px 0 16px}
+p.meta a{border-bottom-color:transparent}
+p.meta a:hover{border-bottom-color:currentColor}
+p{margin:0 0 18px;max-width:700px}
+p strong{font-weight:600}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(28,92,171,.32)}
+a:hover{border-bottom-color:currentColor}
+hr{border:0;border-top:1px solid var(--rule);margin:46px 0}
+ul,ol{margin:0 0 18px;padding-left:22px;max-width:700px}
+li{margin:0 0 8px}
+li>p{margin:0 0 8px}
+code{
+  font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:.86em;background:var(--raised);padding:.12em .34em;border-radius:3px
+}
+pre{
+  background:var(--raised);border:1px solid var(--rule);border-radius:5px;
+  padding:15px 17px;overflow-x:auto;margin:0 0 22px;max-width:820px
+}
+pre code{background:none;padding:0;font-size:13px;line-height:1.55}
+em{color:var(--ink-2)}
+.tw{overflow-x:auto;margin:0 0 26px;max-width:980px}
+table{border-collapse:collapse;font-size:14.5px;min-width:100%}
+th,td{padding:7px 15px 7px 0;text-align:left;border-bottom:1px solid var(--rule);white-space:nowrap}
+th{
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  font-size:11.5px;text-transform:uppercase;letter-spacing:.055em;
+  color:var(--ink-3);font-weight:500;border-bottom-color:var(--ink-3);white-space:normal
+}
+td.num{text-align:right;font-variant-numeric:tabular-nums;padding-right:22px}
+th.num{text-align:right;padding-right:22px}
+tbody tr:last-child td{border-bottom:0}
+figure{margin:30px 0 34px;max-width:980px}
+figure img{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:4px}
+.foot{border-top:1px solid var(--rule);padding:22px 0 40px}
+.foot .wrap{
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  font-size:11.5px;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:8px 20px
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .wrap{padding:0 16px}
+  h1{margin-top:36px}
+  th,td{padding-right:14px}
+}
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap"><span class="slug">spurs-duncan-rapm</span><nav><a href="../index.html">findings</a><a href="https://github.com/jmsmarrelli/spurs-duncan-rapm">repository</a><a href="https://jmsmarrelli.github.io/basketball-analytics/">all projects</a></nav></div></header>
+<main><div class="wrap">
+<h1>Method notes</h1>
+<p>The reconstruction, the two things that had to be added before the ratings made
+sense, and what the team-versus-player bracket does and does not establish.</p>
+<h2>Rebuilding the lineups</h2>
+<p>The feed records substitutions and never records who is on the floor. The walk is
+the obvious one — start each period with five, apply every substitution in order,
+carry the set forward — and the difficulty is entirely in the failures.</p>
+<p>Period-opening fives are the hard part. The box score marks the starters, which
+gives period one. For periods two onward the five is inferred from the first
+events of the period and the substitutions around them, and when that inference
+is inconsistent the game is dropped.</p>
+<p>The check is arithmetic and external: total each player's seconds on the floor
+and compare with the minutes in the box score. A game is kept only if the mean
+absolute error across its players is under 1.5 minutes and no single player is
+off by more than 6. <strong>14,332 of 15,611 games pass, at a mean error of 0.35
+minutes.</strong></p>
+<p><code>output/reconstruction_audit.csv</code> gives the count and the reason for every
+season. Almost all failures are <code>lineup</code> — a substitution that leaves six players
+on the floor or five who cannot be reconciled — and they concentrate in the first
+three seasons, where the feed is worse.</p>
+<h2>Possessions, counted rather than estimated</h2>
+<p>The usual FGA + 0.44×FTA − OREB + TOV is a decent season-level approximation and
+a poor stint-level one, because the 0.44 is a league-average guess about which
+free throws end a trip and stints are short enough for the guess to matter.</p>
+<p>Since the log is right there, possessions are counted from it: mark every event
+that unambiguously identifies which team has the ball, compress the marks into
+runs, and call each run a possession. Ambiguous events — fouls, timeouts, jump
+balls, substitutions — are skipped rather than guessed at, which is safe, because
+dropping a marker can only merge two possessions that were already adjacent and
+identical. And-ones fall out correctly: the made shot and the free throw are
+marked to the same team, are adjacent, and collapse into the one possession they
+were.</p>
+<h2>Two things that had to be in the model</h2>
+<p>Both were absent from the first version of this, and both changed the answer
+enough to be worth naming.</p>
+<p><strong>An intercept.</strong> Without one, a penalized coefficient is pulled toward <em>zero
+points per 100</em>, not toward league average, and the player block has to carry the
+league's scoring level. Every coefficient inflates to cover it.</p>
+<p><strong>An unpenalized effect per season.</strong> Thirteen seasons of a league whose scoring
+level moved by several points per 100. Without season effects that movement also
+lands in the player coefficients, and players whose careers sit in high-scoring
+years are systematically mis-rated.</p>
+<p>The first version I ran had Nick Calathes third in defensive RAPM on 7,400
+possessions and Bradley Beal fifth, and I spent an hour looking for a bug in the
+lineup reconstruction before finding it in the design matrix. With the intercept and the season
+effects in, the top of the same table is Garnett, Bogut, Duncan, Ben Wallace and
+Tony Allen, and <code>output/floor_sensitivity.csv</code> shows the ranking barely moves as
+the possession floor goes from ten thousand to a hundred thousand. That
+stability is the evidence that the fix was a fix and not a preference.</p>
+<h2>The penalty</h2>
+<p>Five-fold cross-validation with folds split by game, on the middle three seasons
+of the sample. It lands at 3,000 and the curve is shallow: 2,000 and 4,000 are
+within 0.5 of it on a held-out error of 3,581. The same penalty is then used for
+every window, which is what makes the career arc comparable season to season —
+re-tuning per window would mix a change in the player with a change in the
+instrument.</p>
+<p>The scale of a RAPM rating is set by the penalty, so a rating is only meaningful
+against the distribution it came from. That is why figure 03 draws the percentile
+band and why the leaderboards quote ranks as well as values.</p>
+<h2>Team against player: what the bracket is for</h2>
+<p>Adding a defensive effect per team-season is easy. Interpreting it is not, because
+a team-season effect is nearly collinear with the defensive coefficients of the
+players who filled that roster. The split between them is decided by which block
+carries the ridge penalty, not by the data.</p>
+<p>So two things are reported, and only one of them is an estimate.</p>
+<p><strong>The test.</strong> Does the team block improve <em>held-out</em> prediction? Folds by game,
+same as everywhere else. This is a real question with a real answer, and the
+answer is 0.79 of 3,650 — consistent in sign across five folds, and two
+hundredths of one per cent.</p>
+<p><strong>The bracket.</strong> With the team block removed, shrunk exactly as hard as a player,
+and effectively free, the same player's rating is read off all three. The two ends
+bound the answer and nothing in between is estimable. For Duncan the bracket is
++4.59 to +4.28; for Roy Hibbert it is +2.07 to +0.34.</p>
+<p>A note on "effectively free": the team dummies sum to the intercept, so with no
+penalty at all the normal equations are exactly singular. The free convention
+uses a token multiplier of 1e-6 on the same ridge, which is what unpenalized
+means in practice.</p>
+<p><code>partial_ridge</code> exists because scikit-learn's Ridge penalises every column
+identically, which is precisely the thing this model must not do. At a few
+thousand columns the normal equations are cheap to form and solve directly.</p>
+<h2>Where this is weakest</h2>
+<p><strong>The first six seasons of the career are not here</strong>, and they are the ones with
+the two Defensive Player of the Year awards in them. The mirror cannot see before
+2003-04.</p>
+<p><strong>The early seasons that are here are the thinnest.</strong> 76% coverage in 2003-04 to
+2005-06 against 96% afterwards. Games fail for reasons unrelated to who was
+playing well, so this is noise rather than bias, but the peak of the career is
+measured with a quarter less evidence than the decline.</p>
+<p><strong>No intervals.</strong> Ridge coefficients do not come with honest standard errors, and
+a bootstrap over 762,000 stints was out of budget for this project. The
+percentile band and the floor sensitivity are what stand in for them, and neither
+is a substitute. Nothing here should be read to a third decimal place.</p>
+<p><strong>A marginal contribution is not an ability.</strong> Figure 03 is the illustration and
+it is not a solvable problem: when Kawhi Leonard becomes the Defensive Player of
+the Year beside a 38-year-old Duncan, Duncan's marginal contribution falls
+because the counterfactual improved. Any rating built on on-court/off-court
+variation has this property.</p>
+<p><strong>Thirteen seasons pooled into one coefficient</strong> means the career leaderboard
+mixes a player's peak and decline. It is the right object for "who was the best
+defender of the era" and the wrong one for "who was the best defender", and the
+rolling windows are there for the second question.</p>
+<p><strong>Regular season only.</strong> The postseason is a different sample against different
+opposition and there is not enough of it to fit this model on.</p>
+</div></main>
+<footer class="foot"><div class="wrap"><span>spurs-duncan-rapm</span><span>figures and tables regenerated by the pipeline in this repository</span></div></footer>
+</body>
+</html>

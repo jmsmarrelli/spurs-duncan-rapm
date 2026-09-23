@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tim Duncan&#x27;s defense, and whether there was a Spurs defense</title>
+<meta name="description" content="The Spurs were the best defensive organization of their era and Tim Duncan was the reason, and those two sentences are usually said as though they were the same sentence. They are ">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+:root{
+  --surface:#fcfcfb; --raised:#f4f3ef; --ink:#0b0b0b; --ink-2:#43423f; --ink-3:#7d7b74;
+  --rule:#e3e2dc; --accent:#1c5cab; --mark:#eb6834;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --surface:#14140f; --raised:#1e1e18; --ink:#f2f1ec; --ink-2:#c9c7bf; --ink-3:#8d8b83;
+    --rule:#2e2e27; --accent:#7fb0f0; --mark:#f2895a;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--surface); color:var(--ink);
+  font:400 17px/1.62 "Source Sans 3","Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-feature-settings:"kern" 1;
+}
+.wrap{max-width:1020px;margin:0 auto;padding:0 22px}
+.bar{border-bottom:1px solid var(--rule);background:var(--surface)}
+.bar .wrap{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:baseline;padding-top:16px;padding-bottom:15px}
+.bar .slug{
+  font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12.5px;letter-spacing:.02em;color:var(--ink-2)
+}
+.bar nav{margin-left:auto;display:flex;gap:18px}
+.bar a{
+  font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12.5px;color:var(--ink-3);text-decoration:none;border-bottom:1px solid transparent
+}
+.bar a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+main{padding:0 0 96px}
+.col{max-width:700px}
+h1{
+  font-family:Archivo,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight:700;font-size:clamp(30px,5.4vw,46px);line-height:1.08;
+  letter-spacing:-.022em;margin:54px 0 20px;max-width:640px
+}
+h2{
+  font-family:Archivo,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight:600;font-size:22px;line-height:1.24;letter-spacing:-.012em;
+  margin:52px 0 14px;max-width:700px
+}
+h3{font-family:Archivo,"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:600;
+  font-size:18.5px;letter-spacing:-.008em;margin:40px 0 8px}
+p.meta{font-size:14.5px;color:var(--ink-3);margin:-2px 0 16px}
+p.meta a{border-bottom-color:transparent}
+p.meta a:hover{border-bottom-color:currentColor}
+p{margin:0 0 18px;max-width:700px}
+p strong{font-weight:600}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(28,92,171,.32)}
+a:hover{border-bottom-color:currentColor}
+hr{border:0;border-top:1px solid var(--rule);margin:46px 0}
+ul,ol{margin:0 0 18px;padding-left:22px;max-width:700px}
+li{margin:0 0 8px}
+li>p{margin:0 0 8px}
+code{
+  font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:.86em;background:var(--raised);padding:.12em .34em;border-radius:3px
+}
+pre{
+  background:var(--raised);border:1px solid var(--rule);border-radius:5px;
+  padding:15px 17px;overflow-x:auto;margin:0 0 22px;max-width:820px
+}
+pre code{background:none;padding:0;font-size:13px;line-height:1.55}
+em{color:var(--ink-2)}
+.tw{overflow-x:auto;margin:0 0 26px;max-width:980px}
+table{border-collapse:collapse;font-size:14.5px;min-width:100%}
+th,td{padding:7px 15px 7px 0;text-align:left;border-bottom:1px solid var(--rule);white-space:nowrap}
+th{
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  font-size:11.5px;text-transform:uppercase;letter-spacing:.055em;
+  color:var(--ink-3);font-weight:500;border-bottom-color:var(--ink-3);white-space:normal
+}
+td.num{text-align:right;font-variant-numeric:tabular-nums;padding-right:22px}
+th.num{text-align:right;padding-right:22px}
+tbody tr:last-child td{border-bottom:0}
+figure{margin:30px 0 34px;max-width:980px}
+figure img{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:4px}
+.foot{border-top:1px solid var(--rule);padding:22px 0 40px}
+.foot .wrap{
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  font-size:11.5px;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:8px 20px
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .wrap{padding:0 16px}
+  h1{margin-top:36px}
+  th,td{padding-right:14px}
+}
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap"><span class="slug">spurs-duncan-rapm</span><nav><a href="docs/method.html">method</a><a href="https://github.com/jmsmarrelli/spurs-duncan-rapm">repository</a><a href="https://jmsmarrelli.github.io/basketball-analytics/">all projects</a></nav></div></header>
+<main><div class="wrap">
+<h1>Tim Duncan's defense, and whether there was a Spurs defense</h1>
+<p>The Spurs were the best defensive organization of their era and Tim Duncan was
+the reason, and those two sentences are usually said as though they were the same
+sentence. They are not. One is about a player and one is about a team, and the
+play-by-play can be made to answer them separately.</p>
+<p>Thirteen seasons, 14,332 games rebuilt possession by possession, 762,571 stints,
+2,628,748 possessions, 2003-04 to 2015-16.</p>
+<p><strong>Among players who were on the floor for a career's worth of the era, only Kevin
+Garnett rates higher on defense than Tim Duncan. There is no measurable Spurs
+defense on top of the Spurs defenders — and the teams where there is one are
+Chicago and Indiana.</strong></p>
+<hr>
+<h2>The part that is actually hard</h2>
+<p>The play-by-play records every substitution and never records a lineup. Getting
+from one to the other is most of the work, and the check on it is the box score:
+walk the game, track who is on the floor, add up each player's seconds, and see
+whether it matches the minutes the scorekeeper wrote down.</p>
+<p><strong>14,332 of 15,611 games survive, at a mean per-player error of 0.35 minutes.</strong>
+Everything else is dropped rather than patched.</p>
+<p>The keep rate is not flat, and this matters for the subject:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Seasons</th>
+<th>Games reconstructed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2003-04 to 2005-06</td>
+<td class="num">76.3%</td>
+</tr>
+<tr>
+<td>2006-07 to 2015-16</td>
+<td class="num"><strong>96.5%</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>The seasons the feed handles worst are the ones in which Duncan was at his peak.</p>
+<hr>
+<h2>The penalty, chosen rather than picked</h2>
+<figure><img loading="lazy" alt="CV curve" src="figures/01_cv_curve.png"></figure>
+<p>Adjusted plus-minus without regularization does not work: teammates share almost
+all of their minutes, the design is near-singular, and the fit answers with
+enormous confident nonsense. Ridge fixes it by refusing to make a large claim
+without a large amount of evidence.</p>
+<p>The penalty is chosen by five-fold cross-validation with <strong>folds split by game</strong>,
+so no stint is ever scored by a model that saw its own game. It lands at 3,000
+and the curve is shallow either side of it, which is worth knowing before anyone
+reads a third decimal place off a rating.</p>
+<p>The model is also given an unpenalized effect per season and an intercept. Both
+matter more than they sound: without them, shrinkage pulls a player toward zero
+points per 100 rather than toward league average, and thirteen seasons of
+changing league scoring get pushed into the player coefficients. Adding them
+turned a leaderboard with Nick Calathes near the top into the one below.</p>
+<hr>
+<h2>Defense, thirteen seasons pooled</h2>
+<figure><img loading="lazy" alt="Leaderboard" src="figures/02_leaderboard.png"></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>Possessions</th>
+<th>Defensive RAPM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kevin Garnett</td>
+<td class="num">91,643</td>
+<td class="num"><strong>+6.33</strong></td>
+</tr>
+<tr>
+<td>Andrew Bogut</td>
+<td class="num">67,414</td>
+<td class="num">+4.97</td>
+</tr>
+<tr>
+<td><strong>Tim Duncan</strong></td>
+<td class="num"><strong>99,990</strong></td>
+<td class="num"><strong>+4.59</strong></td>
+</tr>
+<tr>
+<td>Ben Wallace</td>
+<td class="num">59,132</td>
+<td class="num">+4.28</td>
+</tr>
+<tr>
+<td>Tony Allen</td>
+<td class="num">54,233</td>
+<td class="num">+3.81</td>
+</tr>
+</tbody>
+</table></div>
+<p>Third of the 174 players with 50,000 possessions or more, and <strong>second of the
+sixty-nine with 75,000 or more</strong> — the players who were out there for most of the
+era, where the estimate has the most behind it and the least room to be a sample.
+Raise the floor from ten thousand to seventy-five thousand and his rank moves
+from 3rd to 2nd and nothing else about the top of the table changes;
+<code>output/floor_sensitivity.csv</code> has that in full.</p>
+<p>The model is told who was on the floor and what happened next. It is not told
+position, blocks, rebounds, defensive rating or reputation.</p>
+<p>Two more Spurs, while we are here. <strong>Manu Ginóbili is 5th of 174 in total RAPM</strong>
+at +6.47 — ahead of Duncan's +6.14, on 21,600 fewer possessions, which is a
+better argument for him than most of the ones people make. Tony Parker, on almost
+exactly as many possessions as Duncan, is +2.28, of which the defensive share is
+<strong>−0.02</strong>.</p>
+<hr>
+<h2>The career, and a warning about what RAPM is</h2>
+<figure><img loading="lazy" alt="Career arc" src="figures/03_career_arc.png"></figure>
+<p>Read carelessly, that is a defender falling off a cliff in his mid-thirties: +4.6
+in the window centered on 2010-11, +0.3 by 2014-15.</p>
+<p>Read carefully, it is two lines crossing. Kawhi Leonard goes from −0.7 to +3.9
+over exactly the seasons Duncan goes the other way, and by 2014-15 Leonard is the
+Defensive Player of the Year.</p>
+<p>RAPM is a <strong>marginal</strong> contribution: what happened when this player was on the
+floor, relative to what happened when he was not, given everyone else out there.
+When a team replaces the player who covered for everybody with a younger player
+who covers for everybody, the older one's marginal contribution falls whether or
+not his ability did. Nothing in this data separates the two, and any reading of
+that black line that does not mention the orange one is reading it wrong.</p>
+<hr>
+<h2>Was there a system?</h2>
+<p>The interesting version of the question is testable. Put a defensive effect for
+every team-season into the same model, alongside the players, and ask whether
+knowing which team a lineup belonged to helps predict what happened <strong>once you
+already know the five defenders</strong>.</p>
+<figure><img loading="lazy" alt="System CV" src="figures/04_system_cv.png"></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Held-out error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Players only</td>
+<td class="num">3,649.82</td>
+</tr>
+<tr>
+<td>Plus team-season defense, shrunk like a player</td>
+<td class="num">3,649.04</td>
+</tr>
+<tr>
+<td>Plus team-season defense, free</td>
+<td class="num">3,649.65</td>
+</tr>
+</tbody>
+</table></div>
+<p>The improvement is 0.78 out of 3,650 — <strong>two hundredths of one per cent</strong> — and
+that is the <em>better</em> of the two. Consistent in sign across all five folds, and
+far too small to be what anyone means by a system. The free version, which is
+the one that gives the team block the most room, improves in three folds of five
+and by a tenth of that.</p>
+<p>The same conclusion arrives from the player side. A team-season effect is nearly
+collinear with its own players' defensive coefficients, so which of them gets the
+credit is decided by which block carries the penalty, not by the data. Running it
+both ways brackets the answer:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>Players only</th>
+<th>Team block shrunk</th>
+<th>Team block free</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tim Duncan</strong></td>
+<td class="num"><strong>+4.59</strong></td>
+<td class="num"><strong>+4.59</strong></td>
+<td class="num"><strong>+4.28</strong></td>
+</tr>
+<tr>
+<td>Kevin Garnett</td>
+<td class="num">+6.33</td>
+<td class="num">+6.01</td>
+<td class="num">+5.90</td>
+</tr>
+<tr>
+<td>Tony Allen</td>
+<td class="num">+3.81</td>
+<td class="num">+3.24</td>
+<td class="num">+2.55</td>
+</tr>
+<tr>
+<td>Luol Deng</td>
+<td class="num">+2.95</td>
+<td class="num">+2.29</td>
+<td class="num">+1.22</td>
+</tr>
+<tr>
+<td>Roy Hibbert</td>
+<td class="num">+2.07</td>
+<td class="num">+1.45</td>
+<td class="num">+0.34</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Duncan's number barely moves.</strong> Hand the team every point of credit the data
+will permit and he loses three tenths of a point. The bracket is narrow, which is the
+strongest form the answer can take: this is a player effect, not an accounting
+convention.</p>
+<figure><img loading="lazy" alt="Team defense" src="figures/05_team_defence.png"></figure>
+<p>And where <em>is</em> the residual team defense? Averaged over the era, San Antonio is
+6th at +1.47. Ahead of them are Chicago at +3.58 and Indiana at +2.91 — the
+Thibodeau and Vogel teams. The players who lose the most credit when the team
+block is set free are Roy Hibbert (Indiana), and Luol Deng and Carlos Boozer
+(Chicago) — which is the roster list you would write down from those two team
+names.</p>
+<p>That is a real finding and it is not the one anybody expects: the era's clearest
+statistical case for a defensive <em>system</em> over defensive <em>players</em> is not the
+Spurs.</p>
+<hr>
+<h2>What this does not do</h2>
+<ul>
+<li><strong>Six seasons of Duncan's career are missing.</strong> He arrived in 1997-98 and the
+  play-by-play mirror cannot see before 2003-04. Everything here is his second
+  act.</li>
+<li><strong>No possessions data below the stint.</strong> Possessions are counted from the log
+  rather than estimated, which is the right way round, but a stint is still the
+  smallest unit and a stint contains everything that happened in it.</li>
+<li><strong>RAPM is a marginal contribution</strong>, discussed above, and this cannot be fixed
+  with more data — it is what the estimator means.</li>
+<li><strong>No intervals on the ratings.</strong> Ridge coefficients do not come with honest
+  standard errors and the bootstrap over 762,000 stints was out of budget. The
+  percentile band in figure 03 and the floor sensitivity in
+  <code>output/floor_sensitivity.csv</code> are what stand in for them.</li>
+<li><strong>Regular season only.</strong></li>
+</ul>
+<hr>
+<h2>Running it</h2>
+<pre><code class="language-bash">pip install -r requirements.txt
+python src/run_01_stints.py    # play-by-play -&gt; lineups -&gt; stints  (about 10 minutes)
+python src/run_02_rapm.py      # the career fit and the rolling windows, figures 01-03
+python src/run_03_system.py    # player against team, figures 04-05
+</code></pre>
+<p>Or <code>make all</code>. Stage 1 is the slow one; the two fits are under a minute each.</p>
+<pre><code>src/
+  config.py        paths, seasons, the possession floors
+  lineups.py       who is on the floor, and the box-score check
+  possessions.py   counting possessions from the log rather than estimating them
+  rapm.py          the design matrices, the ridge, and the penalty conventions
+  style.py         one place that decides what every figure looks like
+  run_0*.py        the pipeline, in order
+output/            every number quoted above, as CSV
+figures/           five figures, regenerated from scratch by the pipeline
+docs/method.md     longer notes, including what the bracket does and does not do
+</code></pre>
+<h2>Data</h2>
+<p>Play-by-play and player box scores from
+<a href="https://github.com/sportsdataverse/hoopR-data">sportsdataverse/hoopR-data</a>, a
+mirror of ESPN's public feeds. <code>data/README.md</code> has the fetch step and the
+coverage cliff.</p>
+<h2>License</h2>
+<p>MIT. See <code>LICENSE</code>.</p>
+</div></main>
+<footer class="foot"><div class="wrap"><span>spurs-duncan-rapm</span><span>figures and tables regenerated by the pipeline in this repository</span></div></footer>
+</body>
+</html>
