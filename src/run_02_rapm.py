@@ -103,8 +103,8 @@ def fig_leaderboard(career: pd.DataFrame) -> None:
     ax.grid(axis="y", visible=False)
     S.strip(ax, keep=("bottom",))
     ax.tick_params(axis="y", labelsize=8.8)
-    ax.set_xlabel("Defensive RAPM, points saved per 100 possessions")
-    ax.set_title("Thirteen seasons pooled, defense only", loc="left")
+    ax.set_xlabel("Defensive RAPM, points saved per 100 marked sequences")
+    ax.set_title("Thirteen seasons pooled, defence only", loc="left")
     S.caption(fig, f"One fit over {season_label(SEASONS[0])} to {season_label(SEASONS[-1])}, "
                    f"{MIN_POSS_PLAYER:,}+ possessions to qualify - about six seasons of heavy "
                    f"minutes. The model is told who was on "
@@ -117,7 +117,7 @@ def fig_leaderboard(career: pd.DataFrame) -> None:
 
 def fig_arc(path: pd.DataFrame, foil: pd.DataFrame, windows: pd.DataFrame) -> None:
     fig, ax = plt.subplots(figsize=(9.6, 5.2))
-    band = (windows.groupby("center")["d_rapm"]
+    band = (windows.groupby("centre")["d_rapm"]
             .quantile([0.5, 0.9, 0.99]).unstack())
     ax.fill_between(band.index, band[0.5], band[0.9], color=S.NEUTRAL, alpha=0.35,
                     zorder=1, linewidth=0)
@@ -127,33 +127,27 @@ def fig_arc(path: pd.DataFrame, foil: pd.DataFrame, windows: pd.DataFrame) -> No
                 fontsize=8.8, color=S.INK_3)
     ax.annotate("median to 90th", (band.index[0], band.loc[band.index[0], 0.9]),
                 xytext=(4, 6), textcoords="offset points", fontsize=8.8, color=S.INK_3)
-    ax.plot(path["center"], path["d_rapm"], color=S.SPURS, lw=2.4, zorder=4)
-    ax.scatter(path["center"], path["d_rapm"], s=28, color=S.SPURS, zorder=5,
+    ax.plot(path["centre"], path["d_rapm"], color=S.SPURS, lw=2.4, zorder=4)
+    ax.scatter(path["centre"], path["d_rapm"], s=28, color=S.SPURS, zorder=5,
                edgecolors=S.SURFACE, lw=1.2)
-    ax.annotate(SUBJECT, (path["center"].iloc[-1], path["d_rapm"].iloc[-1]),
+    ax.annotate(SUBJECT, (path["centre"].iloc[-1], path["d_rapm"].iloc[-1]),
                 xytext=(8, -4), textcoords="offset points", va="center",
                 fontsize=9.6, color=S.SPURS, fontweight="semibold")
     if len(foil):
-        ax.plot(foil["center"], foil["d_rapm"], color=S.SERIES[1], lw=2.0, zorder=4)
-        ax.scatter(foil["center"], foil["d_rapm"], s=24, color=S.SERIES[1], zorder=5,
+        ax.plot(foil["centre"], foil["d_rapm"], color=S.SERIES[1], lw=2.0, zorder=4)
+        ax.scatter(foil["centre"], foil["d_rapm"], s=24, color=S.SERIES[1], zorder=5,
                    edgecolors=S.SURFACE, lw=1.1)
-        ax.annotate(FOIL, (foil["center"].iloc[-1], foil["d_rapm"].iloc[-1]),
+        ax.annotate(FOIL, (foil["centre"].iloc[-1], foil["d_rapm"].iloc[-1]),
                     xytext=(8, 6), textcoords="offset points", va="center",
                     fontsize=9.6, color=S.SERIES[1], fontweight="semibold")
     ax.axhline(0, color=S.INK_3, lw=0.9, zorder=2)
     S.strip(ax)
-    ax.set_xlim(path["center"].min() - 0.4, path["center"].max() + 3.4)
-    ax.set_xticks(path["center"], [season_label(int(v)) for v in path["center"]])
+    ax.set_xlim(path["centre"].min() - 0.4, path["centre"].max() + 3.4)
+    ax.set_xticks(path["centre"], [season_label(int(v)) for v in path["centre"]])
     ax.tick_params(axis="x", labelsize=8.4, rotation=0)
-    ax.set_ylabel("Defensive RAPM, points saved per 100")
+    ax.set_ylabel("Defensive RAPM, points saved per 100 marked sequences")
     ax.set_title(f"{SUBJECT}, thirteen seasons of it", loc="left")
-    S.caption(fig, "Each point is a three-season window centered on that season, so the ends of "
-                   "the career are one-sided and the middle is not. The grey band is the median "
-                   "to the 90th percentile of qualified players in the same window, which is the "
-                   "only way to read a number whose scale changes with the penalty. The two "
-                   "lines cross in 2013-14, which is the thing to be careful about: RAPM is a "
-                   "marginal contribution, and a defender's falls when a better one arrives "
-                   "beside him whether or not he has declined.")
+    S.caption(fig, 'Overlapping three-season windows, centered on the displayed season. Values are retrospective adjusted associations per 100 marked offensive sequences. Teammate dependence, coverage differences and changing roles limit comparisons across windows.')
     fig.tight_layout()
     fig.savefig(FIG / "03_career_arc.png")
     plt.close(fig)
@@ -219,7 +213,7 @@ def main() -> None:
     print("\n--- defensive RAPM, thirteen seasons pooled ---")
     print(career.head(12)[["player", "poss", "o_rapm", "d_rapm", "rapm"]]
           .to_string(index=False, float_format=lambda v: f"{v:.3f}"))
-    print("\n--- and by total, offense plus defense ---")
+    print("\n--- and by total, offence plus defence ---")
     print(career.nlargest(10, "rapm")[["player", "poss", "o_rapm", "d_rapm", "rapm"]]
           .to_string(index=False, float_format=lambda v: f"{v:.3f}"))
     iron = everyone[everyone["poss"] >= 100_000].sort_values("d_rapm", ascending=False)
@@ -245,24 +239,24 @@ def main() -> None:
         tab["poss"] = d.possessions_by_player().reindex(tab["player_id"]).to_numpy()
         tab = tab[tab["poss"] >= MIN_POSS_WINDOW]
         tab["player"] = tab["player_id"].map(names)
-        tab["center"] = centre
+        tab["centre"] = centre
         rows.append(tab)
-        print(f"  window centered on {season_label(centre)}: {len(tab):,} qualified players",
+        print(f"  window centred on {season_label(centre)}: {len(tab):,} qualified players",
               flush=True)
     windows = pd.concat(rows, ignore_index=True)
     windows.round(4).to_csv(OUT / "windows.csv", index=False)
 
-    path = windows[windows["player"] == SUBJECT].sort_values("center")
+    path = windows[windows["player"] == SUBJECT].sort_values("centre")
     path.round(4).to_csv(OUT / "subject_path.csv", index=False)
-    foil = windows[windows["player"] == FOIL].sort_values("center")
+    foil = windows[windows["player"] == FOIL].sort_values("centre")
     foil.round(4).to_csv(OUT / "foil_path.csv", index=False)
     fig_arc(path, foil, windows)
 
     print(f"\n--- {SUBJECT}, three-season windows ---")
-    print(path[["center", "poss", "o_rapm", "d_rapm", "rapm"]]
+    print(path[["centre", "poss", "o_rapm", "d_rapm", "rapm"]]
           .to_string(index=False, float_format=lambda v: f"{v:.3f}"))
     print(f"\n--- {FOIL}, the same windows ---")
-    print(foil[["center", "poss", "o_rapm", "d_rapm", "rapm"]]
+    print(foil[["centre", "poss", "o_rapm", "d_rapm", "rapm"]]
           .to_string(index=False, float_format=lambda v: f"{v:.3f}"))
     print(f"\n{time.time() - t0:.0f} seconds")
 

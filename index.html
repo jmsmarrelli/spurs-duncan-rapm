@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tim Duncan&#x27;s defense, and whether there was a Spurs defense</title>
-<meta name="description" content="The Spurs were the best defensive organization of their era and Tim Duncan was the reason, and those two sentences are usually said as though they were the same sentence. They are ">
+<title>Duncan-era adjusted defense and the player/team allocation problem</title>
+<meta name="description" content="Can public play-by-play separate a player&#x27;s defensive contribution from the team context around him? This retrospective study covers 2003–04 through 2015–16, pools reconstructed li">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
 <style>
 :root{
@@ -99,267 +99,220 @@ figure img{display:block;width:100%;height:auto;border:1px solid var(--rule);bor
 </style>
 </head>
 <body>
-<header class="bar"><div class="wrap"><span class="slug">spurs-duncan-rapm</span><nav><a href="docs/method.html">method</a><a href="https://github.com/jmsmarrelli/spurs-duncan-rapm">repository</a><a href="https://jmsmarrelli.github.io/basketball-analytics/">all projects</a></nav></div></header>
+<header class="bar"><div class="wrap"><span class="slug">spurs-duncan-rapm</span><nav><a href="docs/method.html">method</a></nav></div></header>
 <main><div class="wrap">
-<h1>Tim Duncan's defense, and whether there was a Spurs defense</h1>
-<p>The Spurs were the best defensive organization of their era and Tim Duncan was
-the reason, and those two sentences are usually said as though they were the same
-sentence. They are not. One is about a player and one is about a team, and the
-play-by-play can be made to answer them separately.</p>
-<p>Thirteen seasons, 14,332 games rebuilt possession by possession, 762,571 stints,
-2,628,748 possessions, 2003-04 to 2015-16.</p>
-<p><strong>Among players who were on the floor for a career's worth of the era, only Kevin
-Garnett rates higher on defense than Tim Duncan. There is no measurable Spurs
-defense on top of the Spurs defenders — and the teams where there is one are
-Chicago and Indiana.</strong></p>
-<hr>
-<h2>The part that is actually hard</h2>
-<p>The play-by-play records every substitution and never records a lineup. Getting
-from one to the other is most of the work, and the check on it is the box score:
-walk the game, track who is on the floor, add up each player's seconds, and see
-whether it matches the minutes the scorekeeper wrote down.</p>
-<p><strong>14,332 of 15,611 games survive, at a mean per-player error of 0.35 minutes.</strong>
-Everything else is dropped rather than patched.</p>
-<p>The keep rate is not flat, and this matters for the subject:</p>
+<h1>Duncan-era adjusted defense and the player/team allocation problem</h1>
+<p>Can public play-by-play separate a player's defensive contribution from the team context around him? This retrospective study covers 2003–04 through 2015–16, pools reconstructed lineups, and examines how adding team-season effects changes a regularized model.</p>
+<p>It uses <strong>marked offensive sequences</strong>, not certified possession counts. It is best read as a methods and sensitivity study; a coefficient is not a causal measure of a defender or coach.</p>
+<h2>Which games survive reconstruction?</h2>
 <div class="tw"><table>
 <thead>
 <tr>
-<th>Seasons</th>
-<th>Games reconstructed</th>
+<th>Season</th>
+<th>Games in source</th>
+<th>Games kept</th>
+<th>Retained share</th>
+<th>Mean minute error (minutes)</th>
+<th>Recorded points</th>
+<th>Special FT points excluded</th>
+<th>Modeled points</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>2003-04 to 2005-06</td>
-<td class="num">76.3%</td>
+<td>2003–04</td>
+<td class="num">1,174</td>
+<td class="num">730</td>
+<td class="num">0.622</td>
+<td class="num">0.434</td>
+<td class="num">135,730</td>
+<td class="num">942</td>
+<td class="num">134,788</td>
 </tr>
 <tr>
-<td>2006-07 to 2015-16</td>
-<td class="num"><strong>96.5%</strong></td>
+<td>2004–05</td>
+<td class="num">1,218</td>
+<td class="num">746</td>
+<td class="num">0.613</td>
+<td class="num">0.436</td>
+<td class="num">144,315</td>
+<td class="num">909</td>
+<td class="num">143,406</td>
+</tr>
+<tr>
+<td>2005–06</td>
+<td class="num">1,215</td>
+<td class="num">726</td>
+<td class="num">0.598</td>
+<td class="num">0.265</td>
+<td class="num">140,668</td>
+<td class="num">959</td>
+<td class="num">139,709</td>
+</tr>
+<tr>
+<td>2006–07</td>
+<td class="num">1,214</td>
+<td class="num">1,132</td>
+<td class="num">0.932</td>
+<td class="num">0.252</td>
+<td class="num">223,302</td>
+<td class="num">1,679</td>
+<td class="num">221,623</td>
+</tr>
+<tr>
+<td>2007–08</td>
+<td class="num">1,217</td>
+<td class="num">1,168</td>
+<td class="num">0.960</td>
+<td class="num">0.251</td>
+<td class="num">232,991</td>
+<td class="num">1,377</td>
+<td class="num">231,614</td>
+</tr>
+<tr>
+<td>2008–09</td>
+<td class="num">1,228</td>
+<td class="num">1,203</td>
+<td class="num">0.980</td>
+<td class="num">0.249</td>
+<td class="num">240,213</td>
+<td class="num">1,496</td>
+<td class="num">238,717</td>
+</tr>
+<tr>
+<td>2009–10</td>
+<td class="num">1,225</td>
+<td class="num">1,199</td>
+<td class="num">0.979</td>
+<td class="num">0.248</td>
+<td class="num">240,560</td>
+<td class="num">1,390</td>
+<td class="num">239,170</td>
+</tr>
+<tr>
+<td>2010–11</td>
+<td class="num">1,226</td>
+<td class="num">1,197</td>
+<td class="num">0.976</td>
+<td class="num">0.249</td>
+<td class="num">238,131</td>
+<td class="num">1,717</td>
+<td class="num">236,414</td>
+</tr>
+<tr>
+<td>2011–12</td>
+<td class="num">990</td>
+<td class="num">959</td>
+<td class="num">0.969</td>
+<td class="num">0.249</td>
+<td class="num">184,334</td>
+<td class="num">1,177</td>
+<td class="num">183,157</td>
+</tr>
+<tr>
+<td>2012–13</td>
+<td class="num">1,226</td>
+<td class="num">731</td>
+<td class="num">0.596</td>
+<td class="num">0.471</td>
+<td class="num">143,039</td>
+<td class="num">856</td>
+<td class="num">142,183</td>
+</tr>
+<tr>
+<td>2013–14</td>
+<td class="num">1,225</td>
+<td class="num">1,178</td>
+<td class="num">0.962</td>
+<td class="num">0.461</td>
+<td class="num">237,470</td>
+<td class="num">1,388</td>
+<td class="num">236,082</td>
+</tr>
+<tr>
+<td>2014–15</td>
+<td class="num">1,226</td>
+<td class="num">1,157</td>
+<td class="num">0.944</td>
+<td class="num">0.459</td>
+<td class="num">231,040</td>
+<td class="num">1,139</td>
+<td class="num">229,901</td>
+</tr>
+<tr>
+<td>2015–16</td>
+<td class="num">1,227</td>
+<td class="num">559</td>
+<td class="num">0.456</td>
+<td class="num">0.458</td>
+<td class="num">115,635</td>
+<td class="num">638</td>
+<td class="num">114,997</td>
 </tr>
 </tbody>
 </table></div>
-<p>The seasons the feed handles worst are the ones in which Duncan was at his peak.</p>
-<hr>
-<h2>The penalty, chosen rather than picked</h2>
-<figure><img loading="lazy" alt="CV curve" src="figures/01_cv_curve.png"></figure>
-<p>Adjusted plus-minus without regularization does not work: teammates share almost
-all of their minutes, the design is near-singular, and the fit answers with
-enormous confident nonsense. Ridge fixes it by refusing to make a large claim
-without a large amount of evidence.</p>
-<p>The penalty is chosen by five-fold cross-validation with <strong>folds split by game</strong>,
-so no stint is ever scored by a model that saw its own game. It lands at 3,000
-and the curve is shallow either side of it, which is worth knowing before anyone
-reads a third decimal place off a rating.</p>
-<p>The model is also given an unpenalized effect per season and an intercept. Both
-matter more than they sound: without them, shrinkage pulls a player toward zero
-points per 100 rather than toward league average, and thirteen seasons of
-changing league scoring get pushed into the player coefficients. Adding them
-turned a leaderboard with Nick Calathes near the top into the one below.</p>
-<hr>
-<h2>Defense, thirteen seasons pooled</h2>
-<figure><img loading="lazy" alt="Leaderboard" src="figures/02_leaderboard.png"></figure>
-<div class="tw"><table>
-<thead>
-<tr>
-<th></th>
-<th>Possessions</th>
-<th>Defensive RAPM</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Kevin Garnett</td>
-<td class="num">91,643</td>
-<td class="num"><strong>+6.33</strong></td>
-</tr>
-<tr>
-<td>Andrew Bogut</td>
-<td class="num">67,414</td>
-<td class="num">+4.97</td>
-</tr>
-<tr>
-<td><strong>Tim Duncan</strong></td>
-<td class="num"><strong>99,990</strong></td>
-<td class="num"><strong>+4.59</strong></td>
-</tr>
-<tr>
-<td>Ben Wallace</td>
-<td class="num">59,132</td>
-<td class="num">+4.28</td>
-</tr>
-<tr>
-<td>Tony Allen</td>
-<td class="num">54,233</td>
-<td class="num">+3.81</td>
-</tr>
-</tbody>
-</table></div>
-<p>Third of the 174 players with 50,000 possessions or more, and <strong>second of the
-sixty-nine with 75,000 or more</strong> — the players who were out there for most of the
-era, where the estimate has the most behind it and the least room to be a sample.
-Raise the floor from ten thousand to seventy-five thousand and his rank moves
-from 3rd to 2nd and nothing else about the top of the table changes;
-<code>output/floor_sensitivity.csv</code> has that in full.</p>
-<p>The model is told who was on the floor and what happened next. It is not told
-position, blocks, rebounds, defensive rating or reputation.</p>
-<p>Two more Spurs, while we are here. <strong>Manu Ginóbili is 5th of 174 in total RAPM</strong>
-at +6.47 — ahead of Duncan's +6.14, on 21,600 fewer possessions, which is a
-better argument for him than most of the ones people make. Tony Parker, on almost
-exactly as many possessions as Duncan, is +2.28, of which the defensive share is
-<strong>−0.02</strong>.</p>
-<hr>
-<h2>The career, and a warning about what RAPM is</h2>
-<figure><img loading="lazy" alt="Career arc" src="figures/03_career_arc.png"></figure>
-<p>Read carelessly, that is a defender falling off a cliff in his mid-thirties: +4.6
-in the window centered on 2010-11, +0.3 by 2014-15.</p>
-<p>Read carefully, it is two lines crossing. Kawhi Leonard goes from −0.7 to +3.9
-over exactly the seasons Duncan goes the other way, and by 2014-15 Leonard is the
-Defensive Player of the Year.</p>
-<p>RAPM is a <strong>marginal</strong> contribution: what happened when this player was on the
-floor, relative to what happened when he was not, given everyone else out there.
-When a team replaces the player who covered for everybody with a younger player
-who covers for everybody, the older one's marginal contribution falls whether or
-not his ability did. Nothing in this data separates the two, and any reading of
-that black line that does not mention the orange one is reading it wrong.</p>
-<hr>
-<h2>Was there a system?</h2>
-<p>The interesting version of the question is testable. Put a defensive effect for
-every team-season into the same model, alongside the players, and ask whether
-knowing which team a lineup belonged to helps predict what happened <strong>once you
-already know the five defenders</strong>.</p>
-<figure><img loading="lazy" alt="System CV" src="figures/04_system_cv.png"></figure>
+<p>Source: <a href="output/reconstruction_audit.csv">reconstruction_audit.csv</a>.</p>
+<p>The source feed assigns zero <code>score_value</code> to many made free throws in older seasons. The corrected pipeline assigns one point to a marked made free throw and requires team totals to match the box score. Period boundaries reset sequence IDs. Identified technical and retained-ball free throws do not create control changes; their points are separately excluded and audited. Kept games reconcile feed scoring to box scores and modeled ordinary scoring to retained events. Lineups must pass minute checks. Coverage varies by season and exclusion is not random.</p>
+<h2>Does a team-season term improve prediction?</h2>
 <div class="tw"><table>
 <thead>
 <tr>
 <th>Model</th>
-<th>Held-out error</th>
+<th>Cv mse</th>
+<th>Cv sd</th>
+<th>Vs players only</th>
+<th>Folds improved</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Players only</td>
-<td class="num">3,649.82</td>
+<td class="num">3612.375</td>
+<td class="num">24.406</td>
+<td class="num">0.000</td>
+<td class="num">0.000</td>
 </tr>
 <tr>
-<td>Plus team-season defense, shrunk like a player</td>
-<td class="num">3,649.04</td>
+<td>Players, plus team-season defence (shrunk)</td>
+<td class="num">3611.855</td>
+<td class="num">24.273</td>
+<td class="num">0.520</td>
+<td class="num">5.000</td>
 </tr>
 <tr>
-<td>Plus team-season defense, free</td>
-<td class="num">3,649.65</td>
+<td>Players, plus team-season defence (free)</td>
+<td class="num">3612.896</td>
+<td class="num">24.323</td>
+<td class="num">-0.521</td>
+<td class="num">1.000</td>
 </tr>
 </tbody>
 </table></div>
-<p>The improvement is 0.78 out of 3,650 — <strong>two hundredths of one per cent</strong> — and
-that is the <em>better</em> of the two. Consistent in sign across all five folds, and
-far too small to be what anyone means by a system. The free version, which is
-the one that gives the team block the most room, improves in three folds of five
-and by a tenth of that.</p>
-<p>The same conclusion arrives from the player side. A team-season effect is nearly
-collinear with its own players' defensive coefficients, so which of them gets the
-credit is decided by which block carries the penalty, not by the data. Running it
-both ways brackets the answer:</p>
-<div class="tw"><table>
-<thead>
-<tr>
-<th></th>
-<th>Players only</th>
-<th>Team block shrunk</th>
-<th>Team block free</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Tim Duncan</strong></td>
-<td class="num"><strong>+4.59</strong></td>
-<td class="num"><strong>+4.59</strong></td>
-<td class="num"><strong>+4.28</strong></td>
-</tr>
-<tr>
-<td>Kevin Garnett</td>
-<td class="num">+6.33</td>
-<td class="num">+6.01</td>
-<td class="num">+5.90</td>
-</tr>
-<tr>
-<td>Tony Allen</td>
-<td class="num">+3.81</td>
-<td class="num">+3.24</td>
-<td class="num">+2.55</td>
-</tr>
-<tr>
-<td>Luol Deng</td>
-<td class="num">+2.95</td>
-<td class="num">+2.29</td>
-<td class="num">+1.22</td>
-</tr>
-<tr>
-<td>Roy Hibbert</td>
-<td class="num">+2.07</td>
-<td class="num">+1.45</td>
-<td class="num">+0.34</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Duncan's number barely moves.</strong> Hand the team every point of credit the data
-will permit and he loses three tenths of a point. The bracket is narrow, which is the
-strongest form the answer can take: this is a player effect, not an accounting
-convention.</p>
-<figure><img loading="lazy" alt="Team defense" src="figures/05_team_defence.png"></figure>
-<p>And where <em>is</em> the residual team defense? Averaged over the era, San Antonio is
-6th at +1.47. Ahead of them are Chicago at +3.58 and Indiana at +2.91 — the
-Thibodeau and Vogel teams. The players who lose the most credit when the team
-block is set free are Roy Hibbert (Indiana), and Luol Deng and Carlos Boozer
-(Chicago) — which is the roster list you would write down from those two team
-names.</p>
-<p>That is a real finding and it is not the one anybody expects: the era's clearest
-statistical case for a defensive <em>system</em> over defensive <em>players</em> is not the
-Spurs.</p>
-<hr>
-<h2>What this does not do</h2>
-<ul>
-<li><strong>Six seasons of Duncan's career are missing.</strong> He arrived in 1997-98 and the
-  play-by-play mirror cannot see before 2003-04. Everything here is his second
-  act.</li>
-<li><strong>No possessions data below the stint.</strong> Possessions are counted from the log
-  rather than estimated, which is the right way round, but a stint is still the
-  smallest unit and a stint contains everything that happened in it.</li>
-<li><strong>RAPM is a marginal contribution</strong>, discussed above, and this cannot be fixed
-  with more data — it is what the estimator means.</li>
-<li><strong>No intervals on the ratings.</strong> Ridge coefficients do not come with honest
-  standard errors and the bootstrap over 762,000 stints was out of budget. The
-  percentile band in figure 03 and the floor sensitivity in
-  <code>output/floor_sensitivity.csv</code> are what stand in for them.</li>
-<li><strong>Regular season only.</strong></li>
-</ul>
-<hr>
-<h2>Running it</h2>
-<pre><code class="language-bash">pip install -r requirements.txt
-python src/run_01_stints.py    # play-by-play -&gt; lineups -&gt; stints  (about 10 minutes)
-python src/run_02_rapm.py      # the career fit and the rolling windows, figures 01-03
-python src/run_03_system.py    # player against team, figures 04-05
+<p>Source: <a href="output/system_cv.csv">system_cv.csv</a>.</p>
+<p>Mean squared errors use squared points per 100 marked sequences. Differences compare the listed specifications on the same evaluation design.</p>
+<p>The 2009–2011 seasons choose the player penalty and are always training-only in the outer evaluation. Test folds contain other games; the published split makes this separation inspectable. This is a retrospective held-out comparison, not a future-season forecast.</p>
+<figure><img loading="lazy" src="figures/04_system_cv.png" alt="Incremental model comparison" /></figure>
+<h2>Why player and system credit cannot be uniquely separated</h2>
+<p>The same players share the floor for the same team. Their defensive indicators overlap strongly with team-season indicators. Different penalty conventions allocate shared variation differently. Similar player estimates under the chosen conventions show limited sensitivity to those particular choices; they do not prove that the estimate is a player effect independent of scheme.</p>
+<p>A small change in predictive error also does not show that coaching or a defensive system is unimportant. Their effects can already be absorbed in player coefficients. The team-season estimates are not causal upper bounds on a system.</p>
+<figure><img loading="lazy" src="figures/05_team_defence.png" alt="One allocation convention" /></figure>
+<p>Rolling windows overlap and use information on both sides of their displayed center season. They describe historical fitted associations. Eligibility thresholds select a subset of players, so comparisons are conditional on that subset, not “best of all time” claims.</p>
+<h2>Basketball use</h2>
+<p>This is useful as a transparent demonstration of regularization, reconstruction quality and identifiability. It belongs behind the portfolio's coaching-oriented studies. A stronger decision tool would combine independently validated possessions, film context and a specific rotation question rather than treating the player/team split as settled.</p>
+<h2>Reproduce</h2>
+<p>The historical analysis used Python 3.12 with the pinned dependencies below. From this repository:</p>
+<pre><code class="language-bash">python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+make fetch-data PY=python
+make all PY=python
+make report site PY=python
 </code></pre>
-<p>Or <code>make all</code>. Stage 1 is the slow one; the two fits are under a minute each.</p>
-<pre><code>src/
-  config.py        paths, seasons, the possession floors
-  lineups.py       who is on the floor, and the box-score check
-  possessions.py   counting possessions from the log rather than estimating them
-  rapm.py          the design matrices, the ridge, and the penalty conventions
-  style.py         one place that decides what every figure looks like
-  run_0*.py        the pipeline, in order
-output/            every number quoted above, as CSV
-figures/           five figures, regenerated from scratch by the pipeline
-docs/method.md     longer notes, including what the bracket does and does not do
-</code></pre>
-<h2>Data</h2>
-<p>Play-by-play and player box scores from
-<a href="https://github.com/sportsdataverse/hoopR-data">sportsdataverse/hoopR-data</a>, a
-mirror of ESPN's public feeds. <code>data/README.md</code> has the fetch step and the
-coverage cliff.</p>
-<h2>License</h2>
-<p>MIT. See <code>LICENSE</code>.</p>
+<p><code>make all</code> verifies source hashes before running the analyses in order. A missing or changed input stops the build. Data downloads need network access; article rendering uses the included result tables. See <a href="data/source_manifest.json">the source manifest</a>, <a href="docs/method.md">method notes</a> and <a href="VALIDATION_CURRENT.md">current validation record</a> for the distinction between a source rebuild and checks of delivered outputs.</p>
+<p>Season keys in CSV files use the <strong>ending year</strong>: <code>2025</code> means 2024–25. Display tables use full season labels. The MIT license covers code; third-party data retain their providers' rights and terms.</p>
+<p><a href="https://github.com/jmsmarrelli/basketball-analytics">Portfolio</a> · <a href="PROVENANCE.md">AI assistance and provenance</a></p>
+
 </div></main>
-<footer class="foot"><div class="wrap"><span>spurs-duncan-rapm</span><span>figures and tables regenerated by the pipeline in this repository</span></div></footer>
+<footer class="foot"><div class="wrap"><span>spurs-duncan-rapm</span><span>source, results and validation notes in the repository</span></div></footer>
 </body>
 </html>

@@ -1,4 +1,4 @@
-"""Stage 3 - was there a Spurs defense, or only Spurs defenders?
+"""Stage 3 - was there a Spurs defence, or only Spurs defenders?
 
     python src/run_03_system.py
 
@@ -15,7 +15,7 @@ So the project does two things instead of one. First it asks a question the data
 *can* answer - does knowing which team a lineup belonged to help predict what
 happened, once you already know the five defenders? That is a held-out prediction
 test and it comes back yes or no. Then, and only then, it reports the size of the
-effect under both penalty conventions, which brackets it.
+effect under selected penalty conventions as a sensitivity comparison, not a causal bound.
 
 Writes output/system_cv.csv, output/team_defence.csv, output/spurs_system.csv,
 output/player_bracket.csv and figures 04-05.
@@ -93,27 +93,23 @@ def cv_model(design, penalised: np.ndarray, alpha: float,
 
 def fig_cv(cv: pd.DataFrame) -> None:
     d = cv.sort_values("cv_mse", ascending=False).reset_index(drop=True)
-    base = d["cv_mse"].max()
+    base = float(d.loc[d["model"] == "Players only", "cv_mse"].iloc[0])
     fig, ax = plt.subplots(figsize=(9.0, 3.9))
     ax.barh(d.index, base - d["cv_mse"], color=S.SILVER, height=0.5, zorder=2)
     for i, r in d.iterrows():
         ax.text(base - r["cv_mse"] + 0.02, i,
-                f"{base - r['cv_mse']:+.2f}" if i else "reference",
+                f"{base - r['cv_mse']:+.2f}" if r["model"] != "Players only" else "reference",
                 va="center", fontsize=9, color=S.INK_2)
     ax.set_yticks(d.index, d["model"])
     ax.set_ylim(-0.7, len(d) - 0.3)
-    ax.set_xlim(-0.05, max(0.3, (base - d["cv_mse"]).max() * 1.5))
+    ax.set_xlim(min(-0.05, (base - d["cv_mse"]).min() * 1.3), max(0.3, (base - d["cv_mse"]).max() * 1.5))
     ax.grid(axis="y", visible=False)
     S.strip(ax, keep=("bottom",))
     ax.tick_params(axis="y", labelsize=9.2)
     ax.set_xlabel("Reduction in held-out error against the players-only model")
     ax.set_title("Does knowing the team help, once you know the five defenders?",
                  loc="left")
-    S.caption(fig, f"Five-fold cross-validation with folds split by game, over "
-                   f"{season_label(SEASONS[0])} to {season_label(SEASONS[-1])}. The units are "
-                   "squared points per 100 possessions, so the numbers are small by "
-                   "construction; what matters is the sign and whether it is stable across "
-                   "folds.")
+    S.caption(fig, 'Game-grouped evaluation. The 2009–2011 alpha-tuning seasons are training-only and excluded from outer test folds. Differences measure incremental predictive fit under chosen penalties, not causal system effects.')
     fig.tight_layout()
     fig.savefig(FIG / "04_system_cv.png")
     plt.close(fig)
@@ -137,12 +133,9 @@ def fig_team_defence(td: pd.DataFrame) -> None:
     ax.set_xticks(range(SEASONS[0], SEASONS[-1] + 1, 2),
                   [season_label(v) for v in range(SEASONS[0], SEASONS[-1] + 1, 2)])
     ax.tick_params(axis="x", labelsize=8.6)
-    ax.set_ylabel("Team-season defensive effect,\npoints per 100 beyond the five on the floor")
+    ax.set_ylabel("Team-season defensive effect,\npoints per 100 marked sequences, conditional on players")
     ax.set_title("What is left over when the players are already in the model", loc="left")
-    S.caption(fig, "Every team-season, with the defensive effect estimated alongside penalized "
-                   "player coefficients. Positive is good defense. This is the convention that "
-                   "gives the team block as much of the credit as the data will allow, so these "
-                   "are upper bounds on 'system' and should be read that way.")
+    S.caption(fig, 'One penalty convention allocating shared variation to team-season and player effects. This allocation is not uniquely identified and is not an upper bound on coaching or system impact.')
     fig.tight_layout()
     fig.savefig(FIG / "05_team_defence.png")
     plt.close(fig)
@@ -157,6 +150,12 @@ def main() -> None:
     stints = load_stints()
     design = R.TeamDesign(stints)
     fold = R.game_folds(design, N_FOLDS, SEED)
+    # The 2009–2011 tuning window is never included in the outer test folds.
+    from run_02_rapm import CV_WINDOW
+    tuning = stints["season"].between(*CV_WINDOW).to_numpy()
+    fold[tuning] = -1
+    stints[["game_id", "season"]].assign(test_fold=fold).drop_duplicates().to_csv(
+        OUT / "evaluation_split.csv", index=False)
     n_p, n_ts = design.n_players, design.n_team_seasons
     print(f"{len(stints):,} stint-sides, {n_p:,} players, {n_ts} team-seasons, "
           f"penalty {alpha:,.0f}")
@@ -169,8 +168,8 @@ def main() -> None:
 
     rows, per_fold = [], {}
     for label, pen in (("Players only", players_only),
-                       ("Players, plus team-season defense (shrunk)", teams_shrunk),
-                       ("Players, plus team-season defense (free)", teams_free)):
+                       ("Players, plus team-season defence (shrunk)", teams_shrunk),
+                       ("Players, plus team-season defence (free)", teams_free)):
         mse, folds_mse = cv_model(design, pen, alpha, fold)
         per_fold[label] = folds_mse
         rows.append({"model": label, "cv_mse": mse, "cv_sd": float(folds_mse.std())})
