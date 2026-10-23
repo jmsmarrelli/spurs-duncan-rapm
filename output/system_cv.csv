@@ -1,4 +1,4 @@
 model,cv_mse,cv_sd,vs_players_only,folds_improved
-Players only,3649.822,9.46713,0.0,0
-"Players, plus team-season defense (shrunk)",3649.04233,9.34731,0.77966,5
-"Players, plus team-season defense (free)",3649.6487,9.21814,0.1733,3
+Players only,3612.37516,24.40643,0.0,0
+"Players, plus team-season defence (shrunk)",3611.85523,24.27308,0.51993,5
+"Players, plus team-season defence (free)",3612.89567,24.32319,-0.52051,1

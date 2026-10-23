@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Method notes</title>
-<meta name="description" content="The reconstruction, the two things that had to be added before the ratings made sense, and what the team-versus-player bracket does and does not establish.">
+<title>Method and revision notes</title>
+<meta name="description" content="Can public play-by-play separate a player&#x27;s defensive contribution from the team context around him? This retrospective study covers 2003–04 through 2015–16, pools reconstructed li">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
 <style>
 :root{
@@ -99,112 +99,28 @@ figure img{display:block;width:100%;height:auto;border:1px solid var(--rule);bor
 </style>
 </head>
 <body>
-<header class="bar"><div class="wrap"><span class="slug">spurs-duncan-rapm</span><nav><a href="../index.html">findings</a><a href="https://github.com/jmsmarrelli/spurs-duncan-rapm">repository</a><a href="https://jmsmarrelli.github.io/basketball-analytics/">all projects</a></nav></div></header>
+<header class="bar"><div class="wrap"><span class="slug">spurs-duncan-rapm</span><nav><a href="../index.html">findings</a></nav></div></header>
 <main><div class="wrap">
-<h1>Method notes</h1>
-<p>The reconstruction, the two things that had to be added before the ratings made
-sense, and what the team-versus-player bracket does and does not establish.</p>
-<h2>Rebuilding the lineups</h2>
-<p>The feed records substitutions and never records who is on the floor. The walk is
-the obvious one — start each period with five, apply every substitution in order,
-carry the set forward — and the difficulty is entirely in the failures.</p>
-<p>Period-opening fives are the hard part. The box score marks the starters, which
-gives period one. For periods two onward the five is inferred from the first
-events of the period and the substitutions around them, and when that inference
-is inconsistent the game is dropped.</p>
-<p>The check is arithmetic and external: total each player's seconds on the floor
-and compare with the minutes in the box score. A game is kept only if the mean
-absolute error across its players is under 1.5 minutes and no single player is
-off by more than 6. <strong>14,332 of 15,611 games pass, at a mean error of 0.35
-minutes.</strong></p>
-<p><code>output/reconstruction_audit.csv</code> gives the count and the reason for every
-season. Almost all failures are <code>lineup</code> — a substitution that leaves six players
-on the floor or five who cannot be reconciled — and they concentrate in the first
-three seasons, where the feed is worse.</p>
-<h2>Possessions, counted rather than estimated</h2>
-<p>The usual FGA + 0.44×FTA − OREB + TOV is a decent season-level approximation and
-a poor stint-level one, because the 0.44 is a league-average guess about which
-free throws end a trip and stints are short enough for the guess to matter.</p>
-<p>Since the log is right there, possessions are counted from it: mark every event
-that unambiguously identifies which team has the ball, compress the marks into
-runs, and call each run a possession. Ambiguous events — fouls, timeouts, jump
-balls, substitutions — are skipped rather than guessed at, which is safe, because
-dropping a marker can only merge two possessions that were already adjacent and
-identical. And-ones fall out correctly: the made shot and the free throw are
-marked to the same team, are adjacent, and collapse into the one possession they
-were.</p>
-<h2>Two things that had to be in the model</h2>
-<p>Both were absent from the first version of this, and both changed the answer
-enough to be worth naming.</p>
-<p><strong>An intercept.</strong> Without one, a penalized coefficient is pulled toward <em>zero
-points per 100</em>, not toward league average, and the player block has to carry the
-league's scoring level. Every coefficient inflates to cover it.</p>
-<p><strong>An unpenalized effect per season.</strong> Thirteen seasons of a league whose scoring
-level moved by several points per 100. Without season effects that movement also
-lands in the player coefficients, and players whose careers sit in high-scoring
-years are systematically mis-rated.</p>
-<p>The first version I ran had Nick Calathes third in defensive RAPM on 7,400
-possessions and Bradley Beal fifth, and I spent an hour looking for a bug in the
-lineup reconstruction before finding it in the design matrix. With the intercept and the season
-effects in, the top of the same table is Garnett, Bogut, Duncan, Ben Wallace and
-Tony Allen, and <code>output/floor_sensitivity.csv</code> shows the ranking barely moves as
-the possession floor goes from ten thousand to a hundred thousand. That
-stability is the evidence that the fix was a fix and not a preference.</p>
-<h2>The penalty</h2>
-<p>Five-fold cross-validation with folds split by game, on the middle three seasons
-of the sample. It lands at 3,000 and the curve is shallow: 2,000 and 4,000 are
-within 0.5 of it on a held-out error of 3,581. The same penalty is then used for
-every window, which is what makes the career arc comparable season to season —
-re-tuning per window would mix a change in the player with a change in the
-instrument.</p>
-<p>The scale of a RAPM rating is set by the penalty, so a rating is only meaningful
-against the distribution it came from. That is why figure 03 draws the percentile
-band and why the leaderboards quote ranks as well as values.</p>
-<h2>Team against player: what the bracket is for</h2>
-<p>Adding a defensive effect per team-season is easy. Interpreting it is not, because
-a team-season effect is nearly collinear with the defensive coefficients of the
-players who filled that roster. The split between them is decided by which block
-carries the ridge penalty, not by the data.</p>
-<p>So two things are reported, and only one of them is an estimate.</p>
-<p><strong>The test.</strong> Does the team block improve <em>held-out</em> prediction? Folds by game,
-same as everywhere else. This is a real question with a real answer, and the
-answer is 0.79 of 3,650 — consistent in sign across five folds, and two
-hundredths of one per cent.</p>
-<p><strong>The bracket.</strong> With the team block removed, shrunk exactly as hard as a player,
-and effectively free, the same player's rating is read off all three. The two ends
-bound the answer and nothing in between is estimable. For Duncan the bracket is
-+4.59 to +4.28; for Roy Hibbert it is +2.07 to +0.34.</p>
-<p>A note on "effectively free": the team dummies sum to the intercept, so with no
-penalty at all the normal equations are exactly singular. The free convention
-uses a token multiplier of 1e-6 on the same ridge, which is what unpenalized
-means in practice.</p>
-<p><code>partial_ridge</code> exists because scikit-learn's Ridge penalises every column
-identically, which is precisely the thing this model must not do. At a few
-thousand columns the normal equations are cheap to form and solve directly.</p>
-<h2>Where this is weakest</h2>
-<p><strong>The first six seasons of the career are not here</strong>, and they are the ones with
-the two Defensive Player of the Year awards in them. The mirror cannot see before
-2003-04.</p>
-<p><strong>The early seasons that are here are the thinnest.</strong> 76% coverage in 2003-04 to
-2005-06 against 96% afterwards. Games fail for reasons unrelated to who was
-playing well, so this is noise rather than bias, but the peak of the career is
-measured with a quarter less evidence than the decline.</p>
-<p><strong>No intervals.</strong> Ridge coefficients do not come with honest standard errors, and
-a bootstrap over 762,000 stints was out of budget for this project. The
-percentile band and the floor sensitivity are what stand in for them, and neither
-is a substitute. Nothing here should be read to a third decimal place.</p>
-<p><strong>A marginal contribution is not an ability.</strong> Figure 03 is the illustration and
-it is not a solvable problem: when Kawhi Leonard becomes the Defensive Player of
-the Year beside a 38-year-old Duncan, Duncan's marginal contribution falls
-because the counterfactual improved. Any rating built on on-court/off-court
-variation has this property.</p>
-<p><strong>Thirteen seasons pooled into one coefficient</strong> means the career leaderboard
-mixes a player's peak and decline. It is the right object for "who was the best
-defender of the era" and the wrong one for "who was the best defender", and the
-rolling windows are there for the second question.</p>
-<p><strong>Regular season only.</strong> The postseason is a different sample against different
-opposition and there is not enough of it to fit this model on.</p>
+<h1>Method and revision notes</h1>
+<p>Can public play-by-play separate a player's defensive contribution from the team context around him? This retrospective study covers 2003–04 through 2015–16, pools reconstructed lineups, and examines how adding team-season effects changes a regularized model.</p>
+<p>It uses <strong>marked offensive sequences</strong>, not certified possession counts. It is best read as a methods and sensitivity study; a coefficient is not a causal measure of a defender or coach.</p>
+<h2>Which games survive reconstruction?</h2>
+<p><a href="../output/reconstruction_audit.csv">Result table</a></p>
+<p>The source feed assigns zero <code>score_value</code> to many made free throws in older seasons. The corrected pipeline assigns one point to a marked made free throw and requires team totals to match the box score. Period boundaries reset sequence IDs. Identified technical and retained-ball free throws do not create control changes; their points are separately excluded and audited. Kept games reconcile feed scoring to box scores and modeled ordinary scoring to retained events. Lineups must pass minute checks. Coverage varies by season and exclusion is not random.</p>
+<h2>Does a team-season term improve prediction?</h2>
+<p><a href="../output/system_cv.csv">Result table</a></p>
+<p>The 2009–2011 seasons choose the player penalty and are always training-only in the outer evaluation. Test folds contain other games; the published split makes this separation inspectable. This is a retrospective held-out comparison, not a future-season forecast.</p>
+<figure><img loading="lazy" src="../figures/04_system_cv.png" alt="Incremental model comparison" /></figure>
+<h2>Why player and system credit cannot be uniquely separated</h2>
+<p>The same players share the floor for the same team. Their defensive indicators overlap strongly with team-season indicators. Different penalty conventions allocate shared variation differently. Similar player estimates under the chosen conventions show limited sensitivity to those particular choices; they do not prove that the estimate is a player effect independent of scheme.</p>
+<p>A small change in predictive error also does not show that coaching or a defensive system is unimportant. Their effects can already be absorbed in player coefficients. The team-season estimates are not causal upper bounds on a system.</p>
+<figure><img loading="lazy" src="../figures/05_team_defence.png" alt="One allocation convention" /></figure>
+<p>Rolling windows overlap and use information on both sides of their displayed center season. They describe historical fitted associations. Eligibility thresholds select a subset of players, so comparisons are conditional on that subset, not “best of all time” claims.</p>
+<h2>Basketball use</h2>
+<p>This is useful as a transparent demonstration of regularization, reconstruction quality and identifiability. It belongs behind the portfolio's coaching-oriented studies. A stronger decision tool would combine independently validated possessions, film context and a specific rotation question rather than treating the player/team split as settled.</p>
+<p>The result tables are linked and rendered in the main article. Full algorithms and thresholds are in <code>src/</code>; source bytes are recorded in <code>data/source_manifest.json</code>.</p>
+
 </div></main>
-<footer class="foot"><div class="wrap"><span>spurs-duncan-rapm</span><span>figures and tables regenerated by the pipeline in this repository</span></div></footer>
+<footer class="foot"><div class="wrap"><span>spurs-duncan-rapm</span><span>source, results and validation notes in the repository</span></div></footer>
 </body>
 </html>
